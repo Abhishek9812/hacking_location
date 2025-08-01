@@ -1,5 +1,4 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs');
@@ -7,24 +6,7 @@ const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ✅ MongoDB Connection
-mongoose.connect('mongodb://127.0.0.1:27017/trackerDB', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => console.log("✅ MongoDB Connected"))
-.catch(err => console.log("❌ DB Error:", err));
 
-const db = mongoose.connection;
-
-// ✅ Schema
-const logSchema = new mongoose.Schema({
-    ip: String,
-    lat: String,
-    lon: String,
-    userAgent: String,
-    timestamp: { type: Date, default: Date.now }
-});
-const Log = mongoose.model('Log', logSchema);
 
 // ✅ Middleware
 app.use(bodyParser.json());
